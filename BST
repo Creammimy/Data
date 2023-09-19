@@ -1,0 +1,83 @@
+import java.util.Random;
+
+class TreeNode {
+    int key;
+    TreeNode left;
+    TreeNode right;
+
+    public TreeNode(int key) {
+        this.key = key;
+        left = null;
+        right = null;
+    }
+}
+
+public class BSTExample {
+    public static TreeNode insert(TreeNode root, int key) {
+        if (root == null) {
+            return new TreeNode(key);
+        }
+
+        if (key < root.key) {
+            root.left = insert(root.left, key);
+        } else {
+            root.right = insert(root.right, key);
+        }
+
+        return root;
+    }
+
+    public static TreeNode buildTree(int[] randomNumbers) {
+        TreeNode root = null;
+        for (int num : randomNumbers) {
+            root = insert(root, num);
+        }
+        return root;
+    }
+
+    public static void preOrderTraversal(TreeNode root) {
+        if (root != null) {
+            System.out.print(root.key + " ");
+            preOrderTraversal(root.left);
+            preOrderTraversal(root.right);
+        }
+    }
+
+    public static TreeNode findNode(TreeNode root, int key) {
+        if (root == null || root.key == key) {
+            return root;
+        }
+
+        if (key < root.key) {
+            return findNode(root.left, key);
+        } else {
+            return findNode(root.right, key);
+        }
+    }
+
+    public static void main(String[] args) {
+        Random rand = new Random();
+        int n = rand.nextInt(11) + 10; // Random n between 10 and 20
+        int[] randomNumbers = new int[n];
+
+        System.out.println("--- Random numbers [" + n + "] ---");
+        for (int i = 0; i < n; i++) {
+            randomNumbers[i] = rand.nextInt(51); // Random number between 0 and 50
+            System.out.print(randomNumbers[i] + " ");
+        }
+
+        TreeNode root = buildTree(randomNumbers);
+
+        System.out.println("\n--- Tree (Height=" + getTreeHeight(root) + ") ---");
+        preOrderTraversal(root);
+
+        System.out.println("\n--- Search ---");
+        int target = rand.nextInt(51); // Random target between 0 and 50
+        TreeNode foundNode = findNode(root, target);
+        if (foundNode != null) {
+            System.out.println(target + ": Found!");
+        } else {
+            System.out.println(target + ": Not Found!");
+        }
+    }
+}
